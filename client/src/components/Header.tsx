@@ -237,12 +237,13 @@ export function Header({
   return (
     <div
       className={clsx(
-        'relative isolate overflow-hidden',
+        'relative isolate overflow-hidden px-4 md:px-0',
         showHero ? 'bg-gray-900 h-screen' : ''
       )}
     >
       {showHero && (
         <NextImage
+          priority
           src={
             image ||
             'https://res.cloudinary.com/sbarria-dev/image/upload/f_auto,q_auto,b_black,o_20/v1675562873/dj-block/assets/hero_fuwwov.jpg'

@@ -37,7 +37,7 @@ export const AppLayout = ({
         heroText={heroText}
         showHero={showHero}
       />
-      <main>{children}</main>
+      <main className="px-4 md:px-0">{children}</main>
       <Footer />
     </>
   );

@@ -4,7 +4,7 @@ import { navLinks } from '@/constants';
 
 export const Footer = () => {
   return (
-    <footer className="mt-16">
+    <footer className="mt-16 px-4 md:px-0">
       <div className="mx-auto border-t border-zinc-700 max-w-7xl py-12 px-6 md:flex md:items-center md:justify-between lg:px-8">
         <div className="flex justify-center space-x-6 md:order-2">
           {navLinks.map((link) => (
