@@ -1,12 +1,9 @@
-import Head from 'next/head';
+import { AppLayout } from '@/layouts';
 
 export default function HomePage() {
   return (
-    <>
-      <Head>
-        <title>Home | Dj Block</title>
-      </Head>
+    <AppLayout title="Home | Find the hottest parties">
       <div className="text-red-500">hello world</div>
-    </>
+    </AppLayout>
   );
 }

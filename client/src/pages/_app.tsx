@@ -1,8 +1,10 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
-import { Inter, Poppins } from '@next/font/google';
+import { Poppins } from '@next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+import { AppLayout } from '@/layouts';
+
+// const inter = Inter({ subsets: ['latin'] });
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
@@ -10,8 +12,13 @@ const poppins = Poppins({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className={poppins.className}>
+    <>
+      <style jsx global>{`
+        html {
+          font-family: ${poppins.style.fontFamily};
+        }
+      `}</style>
       <Component {...pageProps} />
-    </main>
+    </>
   );
 }
