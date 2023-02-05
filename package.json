@@ -4,13 +4,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "private": true,
   "workspaces": [
     "client"
   ],
   "scripts": {
-    "start:client": "cd client && yarn dev",
-    "start:server": "cd server && yarn develop",
-    "start": "concurrently \"yarn start:client\" \"yarn start:server\""
+    "dev:client": "cd client && yarn dev",
+    "dev:server": "cd server && yarn develop",
+    "dev": "concurrently \"yarn dev:client\" \"yarn dev:server\""
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
