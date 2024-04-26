@@ -9,7 +9,7 @@
 </script>
 
 <header class="flex h-20 items-center justify-between">
-	<div class="text-3xl font-bold">
+	<div class="font-quantico text-3xl font-bold">
 		<a href="/">
 			<span class="text-primary">DJ</span> Block
 		</a>

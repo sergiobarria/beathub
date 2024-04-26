@@ -34,5 +34,13 @@
 
 <!-- SECTION: Featured Events -->
 <section>
-	<h2 class="my-12 text-center text-3xl font-bold">Featured Events</h2>
+	<div class="relative flex items-center py-5">
+		<div class="flex-grow border-t border-gray-400"></div>
+		<h2
+			class="mx-4 my-12 flex-shrink rounded-xl border-x border-gray-400 px-6 text-center text-3xl font-bold"
+		>
+			Upcoming Events
+		</h2>
+		<div class="flex-grow border-t border-gray-400"></div>
+	</div>
 </section>

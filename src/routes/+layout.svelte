@@ -1,4 +1,7 @@
 <script>
+	import '@fontsource/quantico/400.css';
+	import '@fontsource/quantico/700.css';
+
 	import AppHeader from '$lib/components/site/app-header.svelte';
 	import AppFooter from '$lib/components/site/app-footer.svelte';
 

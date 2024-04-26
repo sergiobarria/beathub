@@ -56,7 +56,8 @@ const config: Config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: ['Quantico', ...fontFamily.sans],
+				quantico: ['Quantico', ...fontFamily.sans]
 			}
 		}
 	},
