@@ -57,3 +57,9 @@ export const eventImages = sqliteTable('event_images', {
 // 		references: [events.id]
 // 	}) // One image belongs to one event
 // }));
+
+export const states = sqliteTable('states', {
+	id: text('id').primaryKey(),
+	name: text('name').notNull(),
+	abbreviation: text('abbreviation').notNull()
+});

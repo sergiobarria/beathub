@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { cn } from '$lib/utils';
+	import { PlusIcon } from 'lucide-svelte';
+
+	import Button from '../ui/button/button.svelte';
 
 	const LINKS = [
 		{ label: 'Events', href: '/events', exact: false },
@@ -27,5 +30,11 @@
 				{label}
 			</a>
 		{/each}
+
+		<!-- TODO: Show this button only to authenticated users -->
+		<Button href="/events/add" size="sm">
+			<PlusIcon class="mr-2 size-4" />
+			Add New Event
+		</Button>
 	</nav>
 </header>
