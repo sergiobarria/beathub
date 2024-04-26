@@ -12,12 +12,13 @@
     "format": "prettier --write .",
     "generate-migrations": "drizzle-kit generate:sqlite --config=./drizzle.config.ts",
     "migrate": "bunx tsx ./scripts/migrate.ts",
-    "db:seed": "bunx tsx ./scripts/seed-db.ts",
+    "db:seed-states": "bunx tsx ./scripts/seed-states.ts",
+    "db:seed-events": "bunx tsx ./scripts/seed-events.ts",
     "db:clear": "bunx tsx ./scripts/clear-db.ts"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.563.0",
-    "@aws-sdk/s3-request-presigner": "^3.563.0",
+    "@aws-sdk/client-s3": "^3.564.0",
+    "@aws-sdk/s3-request-presigner": "^3.564.0",
     "@libsql/client": "^0.6.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@sveltejs/adapter-auto": "^3.0.0",
@@ -34,7 +35,7 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.35.1",
-    "lucide-svelte": "^0.373.0",
+    "lucide-svelte": "0.373.0",
     "postcss": "^8.4.32",
     "postcss-load-config": "^5.0.2",
     "prettier": "^3.1.1",
@@ -43,6 +44,7 @@
     "slugify": "^1.6.6",
     "svelte": "^4.2.7",
     "svelte-check": "^3.6.0",
+    "sveltekit-flash-message": "^2.4.4",
     "tailwindcss": "^3.3.6",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
@@ -51,9 +53,15 @@
   "type": "module",
   "dependencies": {
     "@fontsource/quantico": "^5.0.19",
+    "@internationalized/date": "^3.5.2",
     "bits-ui": "^0.21.4",
     "clsx": "^2.1.1",
+    "formsnap": "^1.0.0",
+    "mode-watcher": "^0.3.0",
+    "svelte-sonner": "^0.3.22",
+    "sveltekit-superforms": "^2.12.6",
     "tailwind-merge": "^2.3.0",
-    "tailwind-variants": "^0.2.1"
+    "tailwind-variants": "^0.2.1",
+    "zod": "^3.23.4"
   }
 }
