@@ -1,0 +1,42 @@
+[
+	{
+		"performer_id": 1,
+		"name": "DJ Pulse"
+	},
+	{
+		"performer_id": 2,
+		"name": "Bassline Syndicate"
+	},
+	{
+		"performer_id": 3,
+		"name": "Eclipse"
+	},
+	{
+		"performer_id": 4,
+		"name": "Harmonic Rush"
+	},
+	{
+		"performer_id": 5,
+		"name": "Nocturnal Waves"
+	},
+	{
+		"performer_id": 6,
+		"name": "Platinum Drop"
+	},
+	{
+		"performer_id": 7,
+		"name": "Synthetix"
+	},
+	{
+		"performer_id": 8,
+		"name": "The Groove Architect"
+	},
+	{
+		"performer_id": 9,
+		"name": "Vibe Makers"
+	},
+	{
+		"performer_id": 10,
+		"name": "Melody Miners"
+	}
+]

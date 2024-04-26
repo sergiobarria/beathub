@@ -1,0 +1,122 @@
+[
+	{
+		"event_id": 1,
+		"name": "Bass Nights",
+		"description": "Feel the ground move under your feet at Bass Nights, the ultimate experience for bass lovers.",
+		"date": "2025-05-15",
+		"time": "21:00",
+		"venue": "Club Sonic",
+		"street": "350 Fifth Ave",
+		"city": "New York",
+		"state": "NY",
+		"zip_code": "10118"
+	},
+	{
+		"event_id": 2,
+		"name": "Trance Universe",
+		"description": "Get lost in the pulsating rhythms of Trance Universe, where every beat syncs with your heart.",
+		"date": "2025-06-20",
+		"time": "22:00",
+		"venue": "Galaxy Music Hall",
+		"street": "500 Howard St",
+		"city": "San Francisco",
+		"state": "CA",
+		"zip_code": "94105"
+	},
+	{
+		"event_id": 3,
+		"name": "Electro Swing Party",
+		"description": "A modern twist on retro beats. Come swing to Electro tunes!",
+		"date": "2025-07-03",
+		"time": "20:00",
+		"venue": "Retro Space",
+		"street": "233 S Wacker Dr",
+		"city": "Chicago",
+		"state": "IL",
+		"zip_code": "60606"
+	},
+	{
+		"event_id": 4,
+		"name": "Deep House Depths",
+		"description": "Explore the depths of deep house music in an immersive environment.",
+		"date": "2025-08-15",
+		"time": "19:00",
+		"venue": "Deep Dive",
+		"street": "600 E Grand Ave",
+		"city": "Chicago",
+		"state": "IL",
+		"zip_code": "60611"
+	},
+	{
+		"event_id": 5,
+		"name": "Techno Night",
+		"description": "Experience the intensity of raw, powerful Techno beats all night long.",
+		"date": "2025-09-10",
+		"time": "23:00",
+		"venue": "Bassment",
+		"street": "800 Ocean Dr",
+		"city": "Miami",
+		"state": "FL",
+		"zip_code": "33139"
+	},
+	{
+		"event_id": 6,
+		"name": "Sunset Beats",
+		"description": "Dance till dawn at Sunset Beats, the best outdoor electronic music festival.",
+		"date": "2025-10-05",
+		"time": "18:00",
+		"venue": "Skyline Park",
+		"street": "2000 E Convention Center Way",
+		"city": "Los Angeles",
+		"state": "CA",
+		"zip_code": "90015"
+	},
+	{
+		"event_id": 7,
+		"name": "Vinyl Revival",
+		"description": "Rediscover the classic sounds of vinyl in a modern DJ setting.",
+		"date": "2025-11-21",
+		"time": "19:00",
+		"venue": "The Record Room",
+		"street": "1000 Main St",
+		"city": "Houston",
+		"state": "TX",
+		"zip_code": "77002"
+	},
+	{
+		"event_id": 8,
+		"name": "Rave Redux",
+		"description": "Join us for a night of nostalgic rave anthems and new-age electronic music.",
+		"date": "2025-12-15",
+		"time": "22:00",
+		"venue": "Neon Nexus",
+		"street": "301 Fremont St",
+		"city": "Las Vegas",
+		"state": "NV",
+		"zip_code": "89101"
+	},
+	{
+		"event_id": 9,
+		"name": "Dubstep Drop",
+		"description": "Feel every drop with our heart-stopping Dubstep night.",
+		"date": "2026-01-10",
+		"time": "21:00",
+		"venue": "Bass Box",
+		"street": "400 Broad St",
+		"city": "Seattle",
+		"state": "WA",
+		"zip_code": "98109"
+	},
+	{
+		"event_id": 10,
+		"name": "House Harmony",
+		"description": "House music all night long, where beats and harmonies meet.",
+		"date": "2026-02-20",
+		"time": "20:00",
+		"venue": "Harmony Hall",
+		"street": "1500 Market St",
+		"city": "Philadelphia",
+		"state": "PA",
+		"zip_code": "19102"
+	}
+]

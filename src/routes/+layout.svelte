@@ -1,6 +1,7 @@
 <script>
-	import AppFooter from '$lib/components/app-footer.svelte';
 	import AppHeader from '$lib/components/site/app-header.svelte';
+	import AppFooter from '$lib/components/site/app-footer.svelte';
+
 	import '../app.css';
 </script>
 
