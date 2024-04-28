@@ -10,7 +10,7 @@ export function getTursoClient() {
 	const TURSO_DATABASE_TOKEN = process.env.TURSO_DATABASE_TOKEN as string;
 
 	if (!TURSO_DATABASE_URL || !TURSO_DATABASE_TOKEN) {
-		throw new Error('Missing TURSO_DATABASE_URL or TURSO_DATABASE_TOKEN');
+		throw new Error('Missing Turso Credentials');
 	}
 
 	const client = createClient({ url: TURSO_DATABASE_URL, authToken: TURSO_DATABASE_TOKEN });

@@ -4,7 +4,7 @@
 
 ## Stack
 
--   Frontend: React, Next.js, Shadcn-UI
--   Backend: Next.js, Drizzle ORM
--   Database: Turso
--   Deployment: Vercel
+- Frontend: Sveltekit, Shadcn-Svelte
+- Backend: Sveltekit, Drizzle ORM
+- Database: Turso
+- Deployment: Vercel
