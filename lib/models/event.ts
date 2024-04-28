@@ -6,6 +6,21 @@ import { db } from '@/lib/db/client';
 import { events } from '@/lib/db/schema';
 import { InsertEvent } from '@/lib/schemas';
 
+type Filters = {
+	limit?: number;
+	columns?: Record<string, boolean>;
+};
+
+export const getAllEvents = async ({ columns, limit }: Filters) => {
+	const results = await db.query.events.findMany({
+		columns,
+		orderBy: (events, { desc }) => [desc(events.date)],
+		limit
+	});
+
+	return results;
+};
+
 export const saveEvent = async (data: InsertEvent) => {
 	const result = await db
 		.insert(events)

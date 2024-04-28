@@ -2,10 +2,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { db } from '@/lib/db/client';
+import { generateImageURL } from '@/lib/utils';
+import { EventsList } from '@/components/events/upcoming-events-list';
 
-export default function Home() {
+export default async function Home() {
+	const events = await db.query.events.findMany({
+		columns: { id: true, name: true, venue: true },
+		with: { images: true },
+		orderBy: (events, { desc }) => [desc(events.date)],
+		limit: 4
+	});
+
+	const formattedEvents = events.map((event) => ({
+		...event,
+		cover: generateImageURL(event.images?.at(0)?.objectKey)
+	}));
+
 	return (
-		<main>
+		<main className="mb-12">
 			<section id="hero" className="relative">
 				<Image
 					src="/images/hero.webp"
@@ -13,6 +28,7 @@ export default function Home() {
 					width={1920}
 					height={1080}
 					className="h-[80vh] w-full object-cover"
+					priority
 				/>
 				<div className="absolute inset-0 bg-black/50" />
 
@@ -44,6 +60,8 @@ export default function Home() {
 					</h2>
 					<div className="flex-grow border-t border-gray-400"></div>
 				</div>
+
+				<EventsList events={formattedEvents} />
 			</section>
 		</main>
 	);
