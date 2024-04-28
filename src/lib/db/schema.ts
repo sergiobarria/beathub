@@ -8,6 +8,7 @@ export const events = sqliteTable('events', {
 	name: text('name').notNull().unique(),
 	slug: text('slug').notNull().unique(),
 	venue: text('venue').notNull(),
+	performers: text('performers').notNull(),
 	date: text('date').notNull(),
 	description: text('description').notNull(),
 	time: text('time').notNull(),

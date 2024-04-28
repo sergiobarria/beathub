@@ -1,20 +1,40 @@
 <script>
 	import { page } from '$app/stores';
 	import { PlusIcon } from 'lucide-svelte';
+	import { ModeWatcher } from 'mode-watcher';
+	import { toast } from 'svelte-sonner';
 
 	import '@fontsource/quantico/400.css';
 	import '@fontsource/quantico/700.css';
 
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Toaster } from '$lib/components/ui/sonner';
+	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 
 	import '../app.css';
+
+	import { getFlash } from 'sveltekit-flash-message';
+
+	const flash = getFlash(page);
 
 	const links = [
 		{ id: 0, label: 'Events', href: '/events' },
 		{ id: 1, label: 'About', href: '/about' },
 		{ id: 2, label: 'Contact Us', href: '/contact' }
 	];
+
+	$: if ($flash) {
+		switch ($flash.type) {
+			case 'success': {
+				toast.success($flash.message);
+				break;
+			}
+			case 'error': {
+				toast.error($flash.message);
+				break;
+			}
+		}
+	}
 </script>
 
 <svelte:head>
@@ -39,10 +59,8 @@
 					<a
 						{href}
 						class={cn('px-2 text-sm', {
-							'border-primary border-b-2 py-1.5 font-semibold':
-								$page.url.pathname === href || $page.url.pathname.startsWith(href),
-							'text-muted-foreground hover:text-primary font-thin':
-								$page.url.pathname !== href && !$page.url.pathname.startsWith(href)
+							'border-primary border-b-2 py-1.5 font-semibold': $page.url.pathname === href,
+							'text-muted-foreground hover:text-primary font-thin': $page.url.pathname !== href
 						})}
 					>
 						{label}
@@ -83,4 +101,7 @@
 		<p>Copyright &copy; DJ Block {new Date().getFullYear()}</p>
 		<p>Powered by SvelteKit, Turso and Tailwind CSS</p>
 	</footer>
+
+	<ModeWatcher defaultMode="light" />
+	<Toaster />
 </div>
