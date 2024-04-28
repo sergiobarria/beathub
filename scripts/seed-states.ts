@@ -1,7 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 
 import { getTursoClient } from './get-client';
-import { states } from '../src/lib/db/schema';
+import { states } from '../lib/db/schema';
 import statesData from '../data/states.json';
 
 async function main() {
