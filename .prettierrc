@@ -6,17 +6,5 @@
 	"tabWidth": 4,
 	"bracketSameLine": false,
 	"bracketSpacing": true,
-	"plugins": [
-		"prettier-plugin-svelte",
-		"prettier-plugin-tailwindcss",
-		"prettier-plugin-tailwindcss"
-	],
-	"overrides": [
-		{
-			"files": "*.svelte",
-			"options": {
-				"parser": "svelte"
-			}
-		}
-	]
+	"plugins": ["prettier-plugin-tailwindcss"]
 }

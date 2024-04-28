@@ -1,14 +1,10 @@
-# DJ Block
+# BeatHub
 
-> Full stack application for a showcase of DJ's events and music.
+> Full stack web application that allows users to create, share and view dj events in their area.
 
-## Table of Contents
+## Stack
 
-## Installation
-
-## Setup
-
-```bash
-$ bun create svelte@latest
-$ bun install
-```
+-   Frontend: React, Next.js, Shadcn-UI
+-   Backend: Next.js, Drizzle ORM
+-   Database: Turso
+-   Deployment: Vercel
