@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Quantico } from 'next/font/google';
-import { Toaster } from '@/components/ui/toaster';
 
 import './globals.css';
 import { AppHeader } from '@/components/site/app-header';
@@ -25,7 +24,6 @@ export default function RootLayout({
 					<AppHeader />
 					{children}
 					<AppFooter />
-					<Toaster />
 				</div>
 			</body>
 		</html>

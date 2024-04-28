@@ -1,6 +1,7 @@
-import { getEventById } from '@/lib/db/queries';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
+
+import { getEventById } from '@/lib/models/event';
 
 type PageProps = {
 	params: {
