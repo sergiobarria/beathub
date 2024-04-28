@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "300b15e1-da51-4edf-a0a5-ea61d2e13360",
+  "id": "a7bca4b9-48eb-41ff-bfec-17df82bbd039",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "event_images": {
@@ -205,6 +205,36 @@
           "isUnique": true
         }
       },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "states": {
+      "name": "states",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "abbreviation": {
+          "name": "abbreviation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
