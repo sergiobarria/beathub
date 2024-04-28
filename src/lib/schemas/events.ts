@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Max Image size 5MB
 export const MAX_IMAGE_SIZE = 5_000_000; // 5MB in bytes
 
 export const EventSchema = z.object({
@@ -47,15 +46,14 @@ export const InsertEventSchema = EventSchema.omit({
 	slug: true,
 	createdAt: true,
 	updatedAt: true
+}).extend({
+	image: z
+		.instanceof(File)
+		.refine((file) => file.size < MAX_IMAGE_SIZE, {
+			message: 'Files cannot be larger than 5MB'
+		})
+		.optional()
 });
-// .extend({
-// 	image: z
-// 		.instanceof(File)
-// 		.refine((file) => file.size < MAX_IMAGE_SIZE, {
-// 			message: 'Files cannot be larger than 5MB'
-// 		})
-// 		.optional()
-// })
 
 export type Event = z.infer<typeof EventSchema>;
 export type InsertEvent = typeof InsertEventSchema;

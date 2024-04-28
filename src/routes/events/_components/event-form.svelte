@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import SuperDebug, { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import SuperDebug, {
+		type SuperValidated,
+		type Infer,
+		superForm,
+		fileProxy
+	} from 'sveltekit-superforms';
 
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
@@ -14,6 +19,7 @@
 
 	export let states: Omit<State, 'abbreviation'>[];
 	export let data: SuperValidated<Infer<InsertEvent>>;
+	let imagePreview: string | null = null;
 
 	const form = superForm(data, {
 		validators: zodClient(InsertEventSchema),
@@ -22,15 +28,37 @@
 		}
 	});
 
-	const { form: formData, enhance, delayed, submitting } = form;
+	const { form: formData, enhance, delayed, errors, submitting } = form;
 
 	$: selectedState = $formData.state && {
 		label: $formData.state,
 		value: $formData.state
 	};
+
+	function handleFileUpload(e: Event) {
+		const target = e.target as HTMLInputElement;
+		const file = target.files?.[0];
+
+		if (!file) return;
+
+		const reader = new FileReader();
+		reader.onloadend = (e) => {
+			imagePreview = e.target?.result as string;
+		};
+
+		reader.readAsDataURL(file);
+	}
+
+	const file = fileProxy(formData, 'image');
 </script>
 
-<form method="POST" action="?/create" class="flex flex-col gap-8 lg:flex-row" use:enhance>
+<form
+	method="POST"
+	action="?/create"
+	class="flex flex-col gap-8 lg:flex-row"
+	enctype="multipart/form-data"
+	use:enhance
+>
 	<div class="space-y-3 lg:w-3/5">
 		<Form.Field {form} name="name">
 			<Form.Control let:attrs>
@@ -165,10 +193,26 @@
 
 	<div class="lg:w-2/5">
 		<div class="flex h-[300px] w-full bg-gray-500">
-			<div class="flex h-full w-full items-center justify-center">
-				<p class="text-white">No Image Selected</p>
-			</div>
+			{#if imagePreview}
+				<img src={imagePreview} alt="Event cover" class="h-full w-full object-cover" />
+			{:else}
+				<div class="flex h-full w-full items-center justify-center">
+					<p class="text-white">No Image Selected</p>
+				</div>
+			{/if}
 		</div>
+
+		<input
+			type="file"
+			accept="image/*"
+			name="image"
+			class="hover:file:bg-primary-700 file:bg-primary mt-6 block w-full border p-2 text-sm file:mr-4 file:cursor-pointer file:border-0 file:px-4 file:text-sm file:font-semibold file:text-white focus:outline-none"
+			bind:files={$file}
+			on:change={handleFileUpload}
+		/>
+		{#if $errors.image}
+			<small class="italic text-red-500">{$errors.image}</small>
+		{/if}
 	</div>
 </form>
 

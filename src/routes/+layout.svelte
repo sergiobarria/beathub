@@ -82,11 +82,11 @@
 	<footer
 		class="mt-6 flex flex-col items-center gap-2 border-t border-gray-600 py-8 text-xs text-gray-400"
 	>
-		<div class="flex items-center space-x-2">
+		<div class="flex items-center space-x-3">
 			{#each links as { id, label, href } (id)}
 				<a
 					{href}
-					class={cn('px-2 text-sm', {
+					class={cn('px-1 text-sm', {
 						'border-primary border-b-2 py-1.5 font-semibold':
 							$page.url.pathname === href || $page.url.pathname.startsWith(href),
 						'text-muted-foreground hover:text-primary font-thin':
