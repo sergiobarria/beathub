@@ -39,7 +39,14 @@ export const EventSchema = z.object({
 		.min(5, 'Zip must be at least 5 characters')
 });
 
-export const InsertEventSchema = EventSchema.omit({
+export const InsertEventSchema = EventSchema.extend({
+	image: z
+		.instanceof(File)
+		.refine((file) => file.size < MAX_IMAGE_SIZE, {
+			message: 'Files cannot be larger than 5MB'
+		})
+		.optional()
+}).omit({
 	id: true,
 	slug: true,
 	createdAt: true,

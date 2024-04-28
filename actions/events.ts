@@ -1,43 +1,47 @@
 'use server';
 
-import { redirect } from 'next/navigation';
-import { createId } from '@paralleldrive/cuid2';
-import { parseWithZod } from '@conform-to/zod';
-import slugify from 'slugify';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { parseWithZod } from '@conform-to/zod';
 
-import { db } from '@/lib/db/client';
-import { events } from '@/lib/db/schema';
 import { InsertEventSchema } from '@/lib/schemas';
-import { revalidatePath } from 'next/cache';
+import { uploadFileToR2 } from '@/lib/s3';
+import { saveEvent } from '@/lib/models/event';
+import { saveImageRecord } from '@/lib/models/image';
 
 export async function createEventRecord(prevState: unknown, formData: FormData) {
 	const submission = parseWithZod(formData, { schema: InsertEventSchema });
+	let newEventId: string | null;
 
 	if (submission.status !== 'success') {
 		return submission.reply();
 	}
 
-	// TODO: Handle errors
-	const insertEventResult = await db
-		.insert(events)
-		.values({
-			...submission.value,
-			id: createId(),
-			slug: slugify(submission.value.name, { lower: true }),
-			date: submission.value.date.toISOString()
-		})
-		.returning({ insertedId: events.id });
+	try {
+		// 1. Save the event to the database and get the inserted ID
+		newEventId = await saveEvent(submission.value);
+		if (!newEventId) throw new Error('Failed to save the event.');
 
-	if (insertEventResult.length === 0) {
+		const objectKey = await uploadFileToR2(submission?.value?.image as File);
+		if (!objectKey) throw new Error('Failed to upload the image.');
+
+		// 2.3 Save the image objectKey to the event_images table
+		await saveImageRecord({
+			eventId: newEventId,
+			objectKey,
+			filename: submission?.value?.image?.name as string,
+			mimetype: submission?.value?.image?.type ?? 'image/jpeg',
+			size: submission?.value?.image?.size ?? 0
+		});
+
+		// 3. Create a success cookie to show a success message on the next page
+		cookies().set('eventCreated', 'true', { maxAge: 60 * 5 }); // 5 minutes
+	} catch (err: unknown) {
+		console.error('=> 💥 Error creating the new event record.', err);
 		return submission.reply({
 			formErrors: ['Failed to save the event. Please try again later.']
 		});
 	}
 
-	// Set a success cookie to show a success message on the next page
-	cookies().set('eventCreated', 'true', { maxAge: 60 * 5 }); // 5 minutes
-
-	revalidatePath('/events'); // Revalidate the events list page
-	return redirect('/events/' + insertEventResult?.at(0)?.insertedId);
+	return redirect('/events/' + newEventId);
 }

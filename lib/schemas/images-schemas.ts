@@ -23,10 +23,11 @@ export const ImageSchema = z.object({
 	})
 });
 
-export const InsertImageSchema = ImageSchema.extend({
-	id: ImageSchema.shape.id.optional(),
-	createdAt: ImageSchema.shape.createdAt.optional(),
-	updatedAt: ImageSchema.shape.updatedAt.optional()
+export const InsertImageSchema = ImageSchema.omit({
+	id: true,
+	createdAt: true,
+	updatedAt: true
 });
 
 export type Image = z.infer<typeof ImageSchema>;
+export type InsertImage = z.infer<typeof InsertImageSchema>;

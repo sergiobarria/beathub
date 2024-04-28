@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useFormState } from 'react-dom';
 import {
 	useForm,
@@ -25,12 +26,14 @@ import { DatePicker } from '@/components/site/date-picker';
 import { SubmitButton } from '@/components/site/submit-button';
 import { createEventRecord } from '@/actions/events';
 import { InsertEventSchema, State } from '@/lib/schemas';
+import Image from 'next/image';
 
 interface EventFormProps {
 	states: Omit<State, 'abbreviation'>[];
 }
 
 export function EventForm({ states }: EventFormProps) {
+	const [imagePreview, setImagePreview] = useState<string>('');
 	const [lastResult, createEventAction] = useFormState(createEventRecord, undefined);
 
 	const [form, fields] = useForm({
@@ -53,11 +56,24 @@ export function EventForm({ states }: EventFormProps) {
 		}
 	});
 
+	function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
+		const target = e.target as HTMLInputElement;
+		const file = target.files?.[0];
+		if (!file) return;
+
+		const fileReader = new FileReader();
+		fileReader.onloadend = () => {
+			setImagePreview(fileReader.result as string);
+		};
+		fileReader.readAsDataURL(file);
+	}
+
 	return (
 		<form
 			{...getFormProps(form)}
 			action={createEventAction}
 			className="flex flex-col gap-8 lg:flex-row"
+			encType="multipart/form-data"
 		>
 			<div className="space-y-3 lg:w-3/5">
 				<div>
@@ -164,7 +180,28 @@ export function EventForm({ states }: EventFormProps) {
 
 				<SubmitButton />
 			</div>
-			<div className="lg:w-2/5">image</div>
+			<div className="lg:w-2/5">
+				<div className="flex h-[300px] w-full bg-gray-500">
+					{imagePreview ? (
+						<Image src={imagePreview} alt="event cover" width={720} height={480} />
+					) : (
+						<div className="flex h-full w-full items-center justify-center">
+							<p className="text-white">No Image Selected</p>
+						</div>
+					)}
+				</div>
+
+				<div className="w-full max-w-sm items-center gap-1.5 pt-8">
+					<Label htmlFor="image">Event Cover Image</Label>
+					<Input
+						{...getInputProps(fields.image, { type: 'file' })}
+						accept="image/*"
+						onChange={handleFileInput}
+						className="hover:file:bg-primary-700 mt-2 block w-full text-sm file:mr-4 file:cursor-pointer file:border-0 file:bg-primary file:px-4 file:text-sm file:font-semibold file:text-white focus:outline-none"
+					/>
+					<FieldErrors errors={fields.image.errors} />
+				</div>
+			</div>
 		</form>
 	);
 }

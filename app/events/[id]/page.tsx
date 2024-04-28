@@ -25,7 +25,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
 		<main className="flex-1 py-12">
 			<div>
 				<h1>Event Details Page: Event - {params.id}</h1>
-				{success && <p className="font-semibold text-green-400">New Event!</p>}
+				{success && <p className="font-semibold text-green-400">New Event Created!</p>}
 			</div>
 			<pre>{JSON.stringify(event, null, 2)}</pre>
 		</main>

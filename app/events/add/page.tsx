@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import { EventForm } from '@/components/events/event-form';
-import { getStates } from '@/lib/db/queries';
+import { getStates } from '@/lib/models/state';
 
 export const metadata: Metadata = {
 	title: 'New Event | DJ Block',
