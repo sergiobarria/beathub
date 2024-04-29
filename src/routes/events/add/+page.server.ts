@@ -23,14 +23,14 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	create: async ({ request, cookies }) => {
+	default: async ({ request, cookies }) => {
 		const form = await superValidate(request, zod(InsertEventSchema));
-		let eventId: string | null = null;
-		let objectKey: string | null = null;
+		let eventSlug: string | null = null;
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
+			let objectKey: string | null = null;
 			if (form.data.image) {
 				objectKey = await uploadFileToR2(form.data.image);
 				if (!objectKey) throw new Error('Failed to upload the image');
@@ -41,18 +41,19 @@ export const actions: Actions = {
 				.values({
 					...form.data,
 					id: createId(),
-					slug: slugify(form.data.name, { lower: true })
+					slug: slugify(form.data.name, { lower: true }),
+					cover: objectKey
 				})
-				.returning({ insertedId: events.id });
+				.returning({ insertedSlug: events.slug });
 
-			eventId = result?.at(0)?.insertedId ?? null;
-			if (!eventId) throw new Error('Failed to create the event record');
+			eventSlug = result?.at(0)?.insertedSlug ?? null;
+			if (!eventSlug) throw new Error('Failed to create the event record');
 		} catch (err: unknown) {
 			console.error('=> 💥 There was an error creating the event record: ', err);
 			return fail(500, { form });
 		}
 
-		const url = `/events/${eventId}`;
+		const url = `/events/${eventSlug}`;
 		redirect(303, url, { type: 'success', message: 'Event created successfully' }, cookies);
 	}
 };

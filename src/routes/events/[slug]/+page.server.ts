@@ -13,7 +13,7 @@ import { STORAGE_BASE_URL } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
 	let event = await db.query.events.findFirst({
-		where: (events, { eq }) => eq(events.id, params.id)
+		where: (events, { eq }) => eq(events.slug, params.slug)
 	});
 
 	if (!event) error(404, 'Event not found');

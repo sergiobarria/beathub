@@ -9,10 +9,11 @@ import { getEventCoverImage } from '$lib/utils';
 import { STORAGE_BASE_URL } from '$env/static/private';
 import { uploadFileToR2 } from '$lib/s3.server';
 import { events } from '$lib/db/schema';
+import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const eventData = await db.query.events.findFirst({
-		where: (events, { eq }) => eq(events.id, params.id)
+		where: (events, { eq }) => eq(events.slug, params.slug)
 	});
 
 	const states = await db.query.states.findMany({
@@ -34,12 +35,12 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const form = await superValidate(request, zod(InsertEventSchema));
-		let eventId: string | null = null;
+		let eventSlug: string | null = null;
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			let objectKey = form.data.cover ?? null;
+			let objectKey: string | null = null;
 			if (form.data.image) {
 				objectKey = await uploadFileToR2(form.data.image);
 				if (!objectKey) throw new Error('Failed to upload the image');
@@ -51,15 +52,16 @@ export const actions: Actions = {
 					...form.data,
 					cover: objectKey
 				})
-				.returning({ eventId: events.id });
+				.where(eq(events.id, form.data.id as string))
+				.returning({ eventSlug: events.slug });
 
-			eventId = result?.at(0)?.eventId ?? null;
+			eventSlug = result?.at(0)?.eventSlug ?? null;
 		} catch (err: unknown) {
-			console.error('=> 💥 There was an error creating the event record: ', err);
+			console.error('=> 💥 There was an error updating the event record: ', err);
 			return fail(500, { form });
 		}
 
-		const redirectUrl = `/events/${eventId}`;
+		const redirectUrl = `/events/${eventSlug}`;
 		redirect(303, redirectUrl, { type: 'success', message: 'Event updated' }, cookies);
 	}
 };

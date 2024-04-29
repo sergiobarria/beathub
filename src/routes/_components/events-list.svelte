@@ -5,6 +5,7 @@
 	export let events: {
 		date: string;
 		id: string;
+		slug: string;
 		name: string;
 		venue: string;
 		cover: string | null;
@@ -33,7 +34,7 @@
 				>
 					<h3 class="text-lg font-semibold text-white">{event.name}</h3>
 					<div class="flex items-baseline justify-between">
-						<Button href={`/events/${event.id}`} size="sm">View Details</Button>
+						<Button href={`/events/${event.slug}`} size="sm">View Details</Button>
 						<span class="text-sm">{formatDate(event.date)}</span>
 					</div>
 				</div>

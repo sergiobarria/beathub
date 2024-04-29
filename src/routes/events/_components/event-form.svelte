@@ -54,7 +54,6 @@
 
 	async function handleDeleteImage() {
 		deletingImage = true;
-		console.log('Delete image', $formData.imageUrl);
 		const objectKey = $formData.imageUrl?.split('/').pop();
 
 		try {
@@ -66,7 +65,6 @@
 			if (!response.ok) throw new Error('Failed to delete image');
 
 			const data = await response.json();
-			console.log('🚀 ~ handleDeleteImage ~ data:', data);
 
 			if (!data.success) throw new Error('Failed to delete image');
 
@@ -93,6 +91,9 @@
 	use:enhance
 >
 	<div class="space-y-3 lg:w-3/5">
+		{#if $formData.id}
+			<input type="hidden" name="id" value={$formData.id} />
+		{/if}
 		<Form.Field {form} name="name">
 			<Form.Control let:attrs>
 				<Form.Label>*Even Name</Form.Label>

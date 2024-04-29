@@ -48,7 +48,7 @@
 			{/if}
 		</div>
 		<div class="flex items-center gap-6">
-			<Button href={`/events/${data.event.id}/edit`} variant="outline" class="min-w-28">
+			<Button href={`/events/${data.event.slug}/edit`} variant="outline" class="min-w-28">
 				<PencilIcon class="mr-2 size-4" />
 				Edit
 			</Button>

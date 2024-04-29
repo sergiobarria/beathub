@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		columns: {
 			id: true,
 			name: true,
+			slug: true,
 			date: true,
 			venue: true,
 			performers: true,
@@ -29,6 +30,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	// 	.select({
 	// 		id: events.id,
 	// 		name: events.name,
+	// 		slug: events.slug,
 	// 		date: events.date,
 	// 		venue: events.venue,
 	// 		performers: events.performers,
