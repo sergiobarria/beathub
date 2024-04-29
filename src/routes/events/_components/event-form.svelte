@@ -220,7 +220,7 @@
 			{#if $delayed || $submitting}
 				<Loader2Icon class="size-4 animate-spin" />
 			{:else}
-				Save Event
+				{$formData.id ? 'Update Event' : 'Create Event'}
 			{/if}
 		</Form.Button>
 	</div>
