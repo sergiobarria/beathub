@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1714324919563,
-      "tag": "0000_light_vindicator",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1714333291878,
-      "tag": "0001_hard_madripoor",
+      "when": 1714405513913,
+      "tag": "0000_slippery_the_professor",
       "breakpoints": true
     }
   ]
