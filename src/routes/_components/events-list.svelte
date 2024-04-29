@@ -7,7 +7,7 @@
 		id: string;
 		name: string;
 		venue: string;
-		cover: string;
+		cover: string | null;
 		performers: string;
 	}[];
 </script>
