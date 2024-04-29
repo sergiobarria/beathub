@@ -7,6 +7,7 @@
 		superForm,
 		fileProxy
 	} from 'sveltekit-superforms';
+	import { Loader2Icon } from 'lucide-svelte';
 
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
@@ -15,7 +16,6 @@
 	import { InsertEventSchema, type InsertEvent } from '$lib/schemas';
 	import type { State } from '$lib/schemas';
 	import DatePicker from '$lib/components/ui/date-picker.svelte';
-	import { Loader2Icon } from 'lucide-svelte';
 
 	export let states: Omit<State, 'abbreviation'>[];
 	export let data: SuperValidated<Infer<InsertEvent>>;
@@ -206,7 +206,7 @@
 			type="file"
 			accept="image/*"
 			name="image"
-			class="hover:file:bg-primary-700 file:bg-primary mt-6 block w-full border p-2 text-sm file:mr-4 file:cursor-pointer file:border-0 file:px-4 file:text-sm file:font-semibold file:text-white focus:outline-none"
+			class="hover:file:bg-primary-700 mt-6 block w-full border p-2 text-sm file:mr-4 file:cursor-pointer file:border-0 file:bg-primary file:px-4 file:text-sm file:font-semibold file:text-white focus:outline-none"
 			bind:files={$file}
 			on:change={handleFileUpload}
 		/>

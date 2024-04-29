@@ -55,5 +55,10 @@ export const InsertEventSchema = EventSchema.omit({
 		.optional()
 });
 
+export const DeleteEventSchema = z.object({
+	id: z.string()
+});
+
 export type Event = z.infer<typeof EventSchema>;
 export type InsertEvent = typeof InsertEventSchema;
+export type DeleteEvent = typeof DeleteEventSchema;

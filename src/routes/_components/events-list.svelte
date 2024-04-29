@@ -13,6 +13,10 @@
 </script>
 
 <ul class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+	{#if events.length === 0}
+		<p class="col-span-full text-center text-muted-foreground">No events to display found.</p>
+	{/if}
+
 	{#each events as event}
 		<li class="flex flex-col">
 			<div class="group relative aspect-square overflow-hidden">
