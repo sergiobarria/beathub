@@ -8,14 +8,20 @@ import { db } from '$lib/db/index.server';
 import { events } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { DeleteEventSchema } from '$lib/schemas';
+import { getEventCoverImage } from '$lib/utils';
+import { STORAGE_BASE_URL } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const event = await db.query.events.findFirst({
-		where: (events, { eq }) => eq(events.id, params.id),
-		with: { images: true }
+	let event = await db.query.events.findFirst({
+		where: (events, { eq }) => eq(events.id, params.id)
 	});
 
 	if (!event) error(404, 'Event not found');
+
+	event = {
+		...event,
+		cover: getEventCoverImage(event.cover ?? '', STORAGE_BASE_URL)
+	};
 
 	return {
 		event,

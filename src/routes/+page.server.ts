@@ -11,15 +11,8 @@ export const load: PageServerLoad = async () => {
 			name: true,
 			date: true,
 			venue: true,
-			performers: true
-		},
-		with: {
-			images: {
-				columns: {
-					id: true,
-					objectKey: true
-				}
-			}
+			performers: true,
+			cover: true
 		},
 		orderBy: (events, { desc }) => [desc(events.date)],
 		limit: 3
@@ -27,7 +20,7 @@ export const load: PageServerLoad = async () => {
 
 	const events = eventsData.map((event) => ({
 		...event,
-		cover: getEventCoverImage(event.images[0]?.objectKey, STORAGE_BASE_URL)
+		cover: getEventCoverImage(event?.cover ?? '', STORAGE_BASE_URL)
 	}));
 
 	return { events };

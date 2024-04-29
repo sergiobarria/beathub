@@ -7,7 +7,8 @@
 		superForm,
 		fileProxy
 	} from 'sveltekit-superforms';
-	import { Loader2Icon } from 'lucide-svelte';
+	import { Loader2Icon, XIcon } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
@@ -16,9 +17,11 @@
 	import { InsertEventSchema, type InsertEvent } from '$lib/schemas';
 	import type { State } from '$lib/schemas';
 	import DatePicker from '$lib/components/ui/date-picker.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	export let states: Omit<State, 'abbreviation'>[];
 	export let data: SuperValidated<Infer<InsertEvent>>;
+	let deletingImage = false;
 	let imagePreview: string | null = null;
 
 	const form = superForm(data, {
@@ -49,12 +52,42 @@
 		reader.readAsDataURL(file);
 	}
 
+	async function handleDeleteImage() {
+		deletingImage = true;
+		console.log('Delete image', $formData.imageUrl);
+		const objectKey = $formData.imageUrl?.split('/').pop();
+
+		try {
+			const response = await fetch(`/api/files`, {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ objectKey })
+			});
+			if (!response.ok) throw new Error('Failed to delete image');
+
+			const data = await response.json();
+			console.log('🚀 ~ handleDeleteImage ~ data:', data);
+
+			if (!data.success) throw new Error('Failed to delete image');
+
+			imagePreview = null;
+			$formData.imageUrl = undefined;
+			$formData.image = undefined;
+
+			toast.success('Image deleted successfully');
+		} catch (err: unknown) {
+			console.error('=> Error deleting image:', err);
+			toast.error('Failed to delete image');
+		} finally {
+			deletingImage = false;
+		}
+	}
+
 	const file = fileProxy(formData, 'image');
 </script>
 
 <form
 	method="POST"
-	action="?/create"
 	class="flex flex-col gap-8 lg:flex-row"
 	enctype="multipart/form-data"
 	use:enhance
@@ -192,9 +225,28 @@
 	</div>
 
 	<div class="lg:w-2/5">
-		<div class="flex h-[300px] w-full bg-gray-500">
-			{#if imagePreview}
-				<img src={imagePreview} alt="Event cover" class="h-full w-full object-cover" />
+		<div class="relative flex h-[300px] w-full bg-gray-500">
+			{#if $formData.imageUrl || imagePreview}
+				<img
+					src={imagePreview || $formData.imageUrl}
+					alt="Event cover"
+					class="h-full w-full object-cover"
+				/>
+				{#if $formData.id && $formData.imageUrl}
+					<Button
+						variant="outline"
+						size="icon"
+						class="absolute right-4 top-4 rounded-full bg-primary"
+						disabled={deletingImage}
+						on:click={handleDeleteImage}
+					>
+						{#if deletingImage}
+							<Loader2Icon class="size-4 animate-spin" />
+						{:else}
+							<XIcon class="size-4" />
+						{/if}
+					</Button>
+				{/if}
 			{:else}
 				<div class="flex h-full w-full items-center justify-center">
 					<p class="text-white">No Image Selected</p>

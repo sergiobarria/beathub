@@ -27,7 +27,7 @@
 	<div class="flex items-center justify-between">
 		<div class="flex items-baseline gap-3">
 			<h1 class="text-3xl font-bold tracking-wide">{data.event.name} -</h1>
-			{#if !isNewEvent}
+			{#if isNewEvent}
 				<p class="animate-bounce font-semibold text-green-400">New Event Created!</p>
 			{/if}
 		</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade, fly } from 'svelte/transition';
 	import type { PageData } from './$types';
 
 	import { Button } from '$lib/components/ui/button';
@@ -16,11 +17,12 @@
 			width={1920}
 			height={1080}
 			class="h-[80vh] w-full object-cover"
+			in:fade={{ duration: 800 }}
 		/>
-		<div class="absolute inset-0 bg-black/50" />
+		<div class="absolute inset-0 bg-black/50" in:fade={{ duration: 800 }} />
 
 		<!-- Hero Content -->
-		<div class="absolute inset-0 flex items-center justify-center">
+		<div class="absolute inset-0 flex items-center justify-center" in:fade={{ duration: 1000 }}>
 			<div class="mx-6 bg-black/40 p-4 text-center lg:p-8">
 				<h1
 					class="text-balance text-2xl font-bold leading-10 tracking-widest text-white md:text-6xl"

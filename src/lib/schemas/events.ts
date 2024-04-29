@@ -18,6 +18,7 @@ export const EventSchema = z.object({
 	performers: z.string({
 		required_error: 'Performers list is required'
 	}),
+	cover: z.string().optional(),
 	date: z.string({ required_error: 'Date is required' }),
 	description: z
 		.string({
@@ -42,17 +43,19 @@ export const EventSchema = z.object({
 });
 
 export const InsertEventSchema = EventSchema.omit({
-	id: true,
 	slug: true,
 	createdAt: true,
 	updatedAt: true
 }).extend({
+	id: z.string().optional(),
+	cover: z.string().optional().nullable(),
 	image: z
 		.instanceof(File)
 		.refine((file) => file.size < MAX_IMAGE_SIZE, {
 			message: 'Files cannot be larger than 5MB'
 		})
-		.optional()
+		.optional(),
+	imageUrl: z.string().optional()
 });
 
 export const DeleteEventSchema = z.object({

@@ -1,58 +1,65 @@
-import type { Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 import { fail, superValidate } from 'sveltekit-superforms';
-import { redirect } from 'sveltekit-flash-message/server';
+import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createId } from '@paralleldrive/cuid2';
-import slugify from 'slugify';
+import { redirect } from 'sveltekit-flash-message/server';
 
 import { db } from '$lib/db/index.server';
 import { InsertEventSchema } from '$lib/schemas';
+import { getEventCoverImage } from '$lib/utils';
+import { STORAGE_BASE_URL } from '$env/static/private';
 import { uploadFileToR2 } from '$lib/s3.server';
 import { events } from '$lib/db/schema';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ params }) => {
+	const eventData = await db.query.events.findFirst({
+		where: (events, { eq }) => eq(events.id, params.id)
+	});
+
 	const states = await db.query.states.findMany({
 		columns: { abbreviation: false }
 	});
 
+	const imageUrl = getEventCoverImage(eventData?.cover ?? '', STORAGE_BASE_URL);
+	const event = {
+		...eventData,
+		imageUrl
+	};
+
 	return {
 		states,
-		form: await superValidate(zod(InsertEventSchema))
+		form: await superValidate(event, zod(InsertEventSchema))
 	};
 };
 
 export const actions: Actions = {
-	create: async ({ request, cookies }) => {
+	default: async ({ request, cookies }) => {
 		const form = await superValidate(request, zod(InsertEventSchema));
 		let eventId: string | null = null;
-		let objectKey: string | null = null;
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
+			let objectKey = form.data.cover ?? null;
 			if (form.data.image) {
 				objectKey = await uploadFileToR2(form.data.image);
 				if (!objectKey) throw new Error('Failed to upload the image');
 			}
 
 			const result = await db
-				.insert(events)
-				.values({
+				.update(events)
+				.set({
 					...form.data,
-					id: createId(),
-					slug: slugify(form.data.name, { lower: true })
+					cover: objectKey
 				})
-				.returning({ insertedId: events.id });
+				.returning({ eventId: events.id });
 
-			eventId = result?.at(0)?.insertedId ?? null;
-			if (!eventId) throw new Error('Failed to create the event record');
+			eventId = result?.at(0)?.eventId ?? null;
 		} catch (err: unknown) {
 			console.error('=> 💥 There was an error creating the event record: ', err);
 			return fail(500, { form });
 		}
 
-		const url = `/events/${eventId}`;
-		redirect(303, url, { type: 'success', message: 'Event created successfully' }, cookies);
+		const redirectUrl = `/events/${eventId}`;
+		redirect(303, redirectUrl, { type: 'success', message: 'Event updated' }, cookies);
 	}
 };

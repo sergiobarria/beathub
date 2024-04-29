@@ -54,13 +54,13 @@
 		</div>
 
 		<nav class="flex items-center">
-			<div class="lg:mr-12">
+			<div class="space-x-4 lg:mr-12">
 				{#each links as { id, label, href } (id)}
 					<a
 						{href}
 						class={cn('px-2 text-sm', {
-							'border-primary border-b-2 py-1.5 font-semibold': $page.url.pathname === href,
-							'text-muted-foreground hover:text-primary font-thin': $page.url.pathname !== href
+							'border border-b-2 border-primary py-1.5 font-semibold': $page.url.pathname === href,
+							'font-thin text-muted-foreground hover:text-primary': $page.url.pathname !== href
 						})}
 					>
 						{label}
@@ -87,9 +87,9 @@
 				<a
 					{href}
 					class={cn('px-1 text-sm', {
-						'border-primary border-b-2 py-1.5 font-semibold':
+						'border-b-2 border-primary py-1.5 font-semibold':
 							$page.url.pathname === href || $page.url.pathname.startsWith(href),
-						'text-muted-foreground hover:text-primary font-thin':
+						'font-thin text-muted-foreground hover:text-primary':
 							$page.url.pathname !== href && !$page.url.pathname.startsWith(href)
 					})}
 				>
