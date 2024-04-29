@@ -1,5 +1,5 @@
 <script lang="ts">
-	import aboutImage from '$lib/assets/images/about.png';
+	import { aboutImg } from '$lib/assets/images';
 </script>
 
 <svelte:head>
@@ -11,8 +11,8 @@
 </svelte:head>
 
 <main class="flex flex-col-reverse gap-8 py-8 lg:flex-row lg:px-10 lg:py-12">
-	<article class="prose text-foreground/80 mx-auto text-pretty lg:w-3/5">
-		<h1 class="text-foreground/80 mb-6 text-2xl font-semibold">Our Story</h1>
+	<article class="prose mx-auto text-pretty text-foreground/80 lg:w-3/5">
+		<h1 class="mb-6 text-2xl font-semibold text-foreground/80">Our Story</h1>
 		<p>
 			Founded in 2020 by a trio of music enthusiasts, BeatHub started as a small idea in a bustling
 			city café. Frustrated by missing out on incredible DJ events around town due to scattered
@@ -45,7 +45,7 @@
 	<div class="mb-10 lg:mb-0 lg:w-2/5">
 		<div class="relative mt-16">
 			<img
-				src={aboutImage}
+				src={aboutImg}
 				alt="about"
 				width={500}
 				height={500}

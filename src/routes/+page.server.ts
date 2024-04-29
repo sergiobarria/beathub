@@ -1,7 +1,7 @@
+import { db } from '$lib/db/index.server';
 import type { PageServerLoad } from './$types';
 
 import { STORAGE_BASE_URL } from '$env/static/private';
-import { db } from '$lib/db/index.server';
 import { getEventCoverImage } from '$lib/utils';
 
 export const load: PageServerLoad = async () => {
@@ -21,7 +21,8 @@ export const load: PageServerLoad = async () => {
 				}
 			}
 		},
-		orderBy: (events, { desc }) => [desc(events.date)]
+		orderBy: (events, { desc }) => [desc(events.date)],
+		limit: 3
 	});
 
 	const events = eventsData.map((event) => ({
