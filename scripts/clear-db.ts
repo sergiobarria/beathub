@@ -1,5 +1,5 @@
 import { getTursoClient } from './get-client';
-import { events } from '../src/lib/db/schema';
+import { events } from '../src/lib/server/db/schema';
 
 async function main() {
 	try {

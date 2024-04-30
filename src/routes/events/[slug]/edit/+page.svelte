@@ -5,6 +5,10 @@
 	export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Edit Event: {data.form.data.name} - Event</title>
+</svelte:head>
+
 <main class="py-12">
 	<h1 class="text-3xl font-bold tracking-wide">Edit Event: {data.form.data.name}</h1>
 	<p>Edit the details of the event below. Fields marked with an asterisk (*) are required.</p>

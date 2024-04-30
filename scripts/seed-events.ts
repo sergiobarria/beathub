@@ -2,7 +2,7 @@ import { createId } from '@paralleldrive/cuid2';
 import slugify from 'slugify';
 
 import { getTursoClient } from './get-client';
-import { events } from '../src/lib/db/schema';
+import { events } from '../src/lib/server/db/schema';
 import eventsData from '../data/events.json';
 import performersData from '../data/performers.json';
 

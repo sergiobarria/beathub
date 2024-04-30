@@ -9,6 +9,10 @@
 	export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Home | DJ Block</title>
+</svelte:head>
+
 <main class="mb-12">
 	<section id="hero" class="relative">
 		<img

@@ -33,6 +33,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{data.event.name} - Event</title>
+</svelte:head>
+
 <main class="flex-1 py-12">
 	<div class="flex items-center justify-between">
 		<div class="flex items-baseline gap-3">
