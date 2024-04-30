@@ -11,7 +11,6 @@
 	import { formatDate } from '$lib/utils';
 
 	export let data: PageData;
-	let isNewEvent = false;
 
 	const flash = getFlash(page);
 
@@ -19,10 +18,6 @@
 		validators: zodClient(DeleteEventSchema)
 	});
 	const { enhance, delayed, submitting } = form;
-
-	$: if ($flash) {
-		isNewEvent = true;
-	}
 
 	function formattedAddress() {
 		const { street, city, zip, state } = data.event;
@@ -83,7 +78,11 @@
 	</div>
 
 	<div>
-		<img src={data.event.cover} alt={data.event.name} class="mt-6 h-[500px] w-full object-cover" />
+		<img
+			src={data.event.cover ?? 'https://via.placeholder.com/1280x720'}
+			alt={data.event.name}
+			class="mt-6 h-[500px] w-full object-cover object-bottom"
+		/>
 	</div>
 
 	<div class="mt-6">

@@ -48,14 +48,7 @@ export const InsertEventSchema = EventSchema.omit({
 	updatedAt: true
 }).extend({
 	id: z.string().optional(),
-	cover: z.string().optional().nullable(),
-	image: z
-		.instanceof(File)
-		.refine((file) => file.size < MAX_IMAGE_SIZE, {
-			message: 'Files cannot be larger than 5MB'
-		})
-		.optional(),
-	imageUrl: z.string().optional()
+	cover: z.string().optional().nullable()
 });
 
 export const DeleteEventSchema = z.object({

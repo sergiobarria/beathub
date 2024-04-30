@@ -8,20 +8,13 @@ import { db } from '$lib/db/index.server';
 import { events } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { DeleteEventSchema } from '$lib/schemas';
-import { getEventCoverImage } from '$lib/utils';
-import { STORAGE_BASE_URL } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
-	let event = await db.query.events.findFirst({
+	const event = await db.query.events.findFirst({
 		where: (events, { eq }) => eq(events.slug, params.slug)
 	});
 
 	if (!event) error(404, 'Event not found');
-
-	event = {
-		...event,
-		cover: getEventCoverImage(event.cover ?? '', STORAGE_BASE_URL)
-	};
 
 	return {
 		event,
@@ -30,15 +23,34 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	delete: async ({ request, cookies }) => {
+	delete: async ({ request, cookies, fetch }) => {
 		const form = await superValidate(request, zod(DeleteEventSchema));
 
 		if (!form.valid) fail(400, { form });
 
 		try {
-			await db.delete(events).where(eq(events.id, form.data.id));
+			const event = await db.query.events.findFirst({
+				columns: { cover: true },
+				where: (events, { eq }) => eq(events.id, form.data.id)
+			});
 
-			// TODO: Delete the images from the R2 bucket (they cascade for the DB) 👇
+			if (event?.cover) {
+				// Delete the image from the UploadThing bucket if it exists
+				const response = await fetch('/api/uploadthing', {
+					method: 'DELETE',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ url: event?.cover })
+				});
+				if (!response.ok) throw new Error('Failed to delete image from UploadThing');
+
+				const data = await response.json();
+				console.log('🚀 ~ delete: ~ data:', data);
+
+				if (!data.success) throw new Error('Failed to delete image from UploadThing');
+			}
+
+			// If the image was deleted from the UploadThing bucket, delete the event from the DB
+			await db.delete(events).where(eq(events.id, form.data.id));
 		} catch (err: unknown) {
 			console.error('=> delete event error:', err);
 			fail(500, { error: 'Failed to delete event' });

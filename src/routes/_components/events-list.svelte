@@ -22,7 +22,7 @@
 		<li class="flex flex-col">
 			<div class="group relative aspect-square overflow-hidden">
 				<img
-					src={event.cover}
+					src={event.cover ?? 'https://via.placeholder.com/600'}
 					alt="cover"
 					sizes="(min-width: 640px) 50vw, 100vw"
 					class="transform object-cover transition-transform duration-300 ease-in-out hover:scale-110"

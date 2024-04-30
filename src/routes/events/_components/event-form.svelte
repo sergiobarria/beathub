@@ -1,14 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import SuperDebug, {
-		type SuperValidated,
-		type Infer,
-		superForm,
-		fileProxy
-	} from 'sveltekit-superforms';
-	import { Loader2Icon, XIcon } from 'lucide-svelte';
+	import SuperDebug, { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { Loader2Icon, XIcon, UploadIcon } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import { UploadDropzone } from '@uploadthing/svelte';
 
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
@@ -18,11 +14,11 @@
 	import type { State } from '$lib/schemas';
 	import DatePicker from '$lib/components/ui/date-picker.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { createUploader } from '$lib/upload';
 
 	export let states: Omit<State, 'abbreviation'>[];
 	export let data: SuperValidated<Infer<InsertEvent>>;
 	let deletingImage = false;
-	let imagePreview: string | null = null;
 
 	const form = superForm(data, {
 		validators: zodClient(InsertEventSchema),
@@ -31,48 +27,29 @@
 		}
 	});
 
-	const { form: formData, enhance, delayed, errors, submitting } = form;
+	const { form: formData, enhance, delayed, submitting } = form;
 
 	$: selectedState = $formData.state && {
 		label: $formData.state,
 		value: $formData.state
 	};
 
-	function handleFileUpload(e: Event) {
-		const target = e.target as HTMLInputElement;
-		const file = target.files?.[0];
-
-		if (!file) return;
-
-		const reader = new FileReader();
-		reader.onloadend = (e) => {
-			imagePreview = e.target?.result as string;
-		};
-
-		reader.readAsDataURL(file);
-	}
-
-	async function handleDeleteImage() {
+	async function handleDeleteFile() {
 		deletingImage = true;
-		const objectKey = $formData.imageUrl?.split('/').pop();
 
 		try {
-			const response = await fetch(`/api/files`, {
+			const response = await fetch('/api/uploadthing', {
 				method: 'DELETE',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ objectKey })
+				body: JSON.stringify({ url: $formData.cover })
 			});
+
 			if (!response.ok) throw new Error('Failed to delete image');
 
-			const data = await response.json();
-
-			if (!data.success) throw new Error('Failed to delete image');
-
-			imagePreview = null;
-			$formData.imageUrl = undefined;
-			$formData.image = undefined;
-
+			$formData.cover = undefined;
 			toast.success('Image deleted successfully');
+
+			// TODO: prevent user from reloading the page without saving
 		} catch (err: unknown) {
 			console.error('=> Error deleting image:', err);
 			toast.error('Failed to delete image');
@@ -81,12 +58,20 @@
 		}
 	}
 
-	const file = fileProxy(formData, 'image');
+	const uploader = createUploader('imageUploader', {
+		onClientUploadComplete: (res) => {
+			$formData.cover = res?.at(0)?.url;
+		},
+		onUploadError: (err) => {
+			console.error('=> Error uploading image:', err);
+			toast.error('Failed to upload image');
+		}
+	});
 </script>
 
 <form
 	method="POST"
-	class="flex flex-col gap-8 lg:flex-row"
+	class="mx-auto flex max-w-screen-xl flex-col gap-8 lg:flex-row"
 	enctype="multipart/form-data"
 	use:enhance
 >
@@ -226,46 +211,42 @@
 	</div>
 
 	<div class="lg:w-2/5">
-		<div class="relative flex h-[300px] w-full bg-gray-500">
-			{#if $formData.imageUrl || imagePreview}
-				<img
-					src={imagePreview || $formData.imageUrl}
-					alt="Event cover"
-					class="h-full w-full object-cover"
-				/>
-				{#if $formData.id && $formData.imageUrl}
-					<Button
-						variant="outline"
-						size="icon"
-						class="absolute right-4 top-4 rounded-full bg-primary"
-						disabled={deletingImage}
-						on:click={handleDeleteImage}
-					>
-						{#if deletingImage}
-							<Loader2Icon class="size-4 animate-spin" />
-						{:else}
-							<XIcon class="size-4" />
-						{/if}
-					</Button>
-				{/if}
-			{:else}
-				<div class="flex h-full w-full items-center justify-center">
-					<p class="text-white">No Image Selected</p>
-				</div>
-			{/if}
-		</div>
+		{#if $formData.cover}
+			<div class="relative flex h-[300px] w-full bg-gray-500">
+				<img src={$formData.cover} alt="Event cover" class="h-full w-full object-cover" />
+				<Button
+					variant="outline"
+					size="icon"
+					class="absolute right-2 top-2 bg-destructive"
+					disabled={deletingImage}
+					aria-disabled={deletingImage}
+					on:click={handleDeleteFile}
+					title="Delete image"
+				>
+					{#if deletingImage}
+						<Loader2Icon class="size-4 animate-spin" />
+					{:else}
+						<XIcon class="size-4" />
+					{/if}
+				</Button>
+			</div>
+		{:else}
+			<UploadDropzone {uploader} class="h-[300px] bg-gray-600 p-6 hover:cursor-pointer">
+				<UploadIcon slot="upload-icon" class="size-16" let:state />
+				<span slot="button-content" let:state>
+					{state.isUploading ? `${state.uploadProgress}%` : 'Pick a file'}
+				</span>
 
-		<input
-			type="file"
-			accept="image/*"
-			name="image"
-			class="hover:file:bg-primary-700 mt-6 block w-full border p-2 text-sm file:mr-4 file:cursor-pointer file:border-0 file:bg-primary file:px-4 file:text-sm file:font-semibold file:text-white focus:outline-none"
-			bind:files={$file}
-			on:change={handleFileUpload}
-		/>
-		{#if $errors.image}
-			<small class="italic text-red-500">{$errors.image}</small>
+				<span slot="label" let:state class="text-white">
+					{state.ready ? 'Ready to upload' : 'Loading...'}
+				</span>
+
+				<span slot="allowed-content" let:state class="text-gray-300">
+					You can choose between {state.fileTypes.join(', ')} files
+				</span>
+			</UploadDropzone>
 		{/if}
+		<input hidden bind:value={$formData.cover} name="cover" />
 	</div>
 </form>
 

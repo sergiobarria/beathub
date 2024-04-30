@@ -8,7 +8,6 @@ import slugify from 'slugify';
 
 import { db } from '$lib/db/index.server';
 import { InsertEventSchema } from '$lib/schemas';
-import { uploadFileToR2 } from '$lib/s3.server';
 import { events } from '$lib/db/schema';
 
 export const load: PageServerLoad = async () => {
@@ -30,19 +29,12 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			let objectKey: string | null = null;
-			if (form.data.image) {
-				objectKey = await uploadFileToR2(form.data.image);
-				if (!objectKey) throw new Error('Failed to upload the image');
-			}
-
 			const result = await db
 				.insert(events)
 				.values({
 					...form.data,
 					id: createId(),
-					slug: slugify(form.data.name, { lower: true }),
-					cover: objectKey
+					slug: slugify(form.data.name, { lower: true })
 				})
 				.returning({ insertedSlug: events.slug });
 

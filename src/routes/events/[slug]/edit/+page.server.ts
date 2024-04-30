@@ -5,26 +5,17 @@ import { redirect } from 'sveltekit-flash-message/server';
 
 import { db } from '$lib/db/index.server';
 import { InsertEventSchema } from '$lib/schemas';
-import { getEventCoverImage } from '$lib/utils';
-import { STORAGE_BASE_URL } from '$env/static/private';
-import { uploadFileToR2 } from '$lib/s3.server';
 import { events } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const eventData = await db.query.events.findFirst({
+	const event = await db.query.events.findFirst({
 		where: (events, { eq }) => eq(events.slug, params.slug)
 	});
 
 	const states = await db.query.states.findMany({
 		columns: { abbreviation: false }
 	});
-
-	const imageUrl = getEventCoverImage(eventData?.cover ?? '', STORAGE_BASE_URL);
-	const event = {
-		...eventData,
-		imageUrl
-	};
 
 	return {
 		states,
@@ -40,18 +31,9 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			let objectKey: string | null = null;
-			if (form.data.image) {
-				objectKey = await uploadFileToR2(form.data.image);
-				if (!objectKey) throw new Error('Failed to upload the image');
-			}
-
 			const result = await db
 				.update(events)
-				.set({
-					...form.data,
-					cover: objectKey
-				})
+				.set({ ...form.data })
 				.where(eq(events.id, form.data.id as string))
 				.returning({ eventSlug: events.slug });
 
