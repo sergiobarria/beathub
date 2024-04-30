@@ -4,8 +4,8 @@ import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { db } from '$lib/db/index.server';
-import { events } from '$lib/db/schema';
+import { db } from '$lib/server/db';
+import { events } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { DeleteEventSchema } from '$lib/schemas';
 

@@ -6,9 +6,9 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { createId } from '@paralleldrive/cuid2';
 import slugify from 'slugify';
 
-import { db } from '$lib/db/index.server';
+import { db } from '$lib/server/db';
 import { InsertEventSchema } from '$lib/schemas';
-import { events } from '$lib/db/schema';
+import { events } from '$lib/server/db/schema';
 
 export const load: PageServerLoad = async () => {
 	const states = await db.query.states.findMany({

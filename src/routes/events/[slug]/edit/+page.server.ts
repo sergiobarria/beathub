@@ -3,9 +3,9 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from 'sveltekit-flash-message/server';
 
-import { db } from '$lib/db/index.server';
+import { db } from '$lib/server/db';
 import { InsertEventSchema } from '$lib/schemas';
-import { events } from '$lib/db/schema';
+import { events } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ params }) => {
