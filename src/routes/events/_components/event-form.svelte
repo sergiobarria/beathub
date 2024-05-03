@@ -115,7 +115,9 @@
 			<Form.Field {form} name="date" class="w-full">
 				<Form.Control let:attrs>
 					<Form.Label>*Date</Form.Label>
-					<DatePicker bind:date={$formData.date} />
+					<div>
+						<DatePicker bind:date={$formData.date} />
+					</div>
 					<input hidden bind:value={$formData.date} name={attrs.name} />
 				</Form.Control>
 				<Form.FieldErrors />
@@ -231,19 +233,23 @@
 				</Button>
 			</div>
 		{:else}
-			<UploadDropzone {uploader} class="h-[300px] bg-gray-600 p-6 hover:cursor-pointer">
+			<UploadDropzone
+				{uploader}
+				class="h-[300px] border-dashed bg-gray-700/50 p-6 hover:cursor-pointer"
+			>
 				<UploadIcon slot="upload-icon" class="size-16" let:state />
-				<span slot="button-content" let:state>
+				<Button size="sm" slot="button-content" let:state class="bg-primary">
 					{state.isUploading ? `${state.uploadProgress}%` : 'Pick a file'}
-				</span>
+				</Button>
 
 				<span slot="label" let:state class="text-white">
 					{state.ready ? 'Ready to upload' : 'Loading...'}
 				</span>
 
-				<span slot="allowed-content" let:state class="text-gray-300">
+				<div slot="allowed-content" let:state class="text-gray-300">
 					You can choose between {state.fileTypes.join(', ')} files
-				</span>
+					<p>(Max. File Size 4MB)</p>
+				</div>
 			</UploadDropzone>
 		{/if}
 		<input hidden bind:value={$formData.cover} name="cover" />
