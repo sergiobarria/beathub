@@ -28,8 +28,8 @@
 
 <main class="my-6 flex-1">
 	<h1 class="text-3xl font-bold tracking-wide">Published Events</h1>
-	<div class="flex justify-between">
-		<p class="lg:max-w-1/2">
+	<div class="flex justify-between gap-6">
+		<p class="text-pretty lg:max-w-2xl">
 			These are the published events. You can view the details of each event by clicking on the
 			"View Details" button when you hover over the event cover.
 		</p>

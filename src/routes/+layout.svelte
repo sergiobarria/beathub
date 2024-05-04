@@ -1,27 +1,15 @@
 <script>
 	import { page } from '$app/stores';
-	import { PlusIcon } from 'lucide-svelte';
+	import { Toaster, toast } from 'svelte-sonner';
+	import { getFlash } from 'sveltekit-flash-message';
 	import { ModeWatcher } from 'mode-watcher';
-	import { toast } from 'svelte-sonner';
 
 	import '@fontsource/quantico/400.css';
 	import '@fontsource/quantico/700.css';
 
-	import { Toaster } from '$lib/components/ui/sonner';
-	import { Button } from '$lib/components/ui/button';
-	import { cn } from '$lib/utils';
-
 	import '../app.css';
 
-	import { getFlash } from 'sveltekit-flash-message';
-
 	const flash = getFlash(page);
-
-	const links = [
-		{ id: 0, label: 'Events', href: '/events' },
-		{ id: 1, label: 'About', href: '/about' },
-		{ id: 2, label: 'Contact Us', href: '/contact' }
-	];
 
 	$: if ($flash) {
 		switch ($flash.type) {
@@ -45,63 +33,7 @@
 	/>
 </svelte:head>
 
-<div class="container mx-auto flex h-full min-h-screen max-w-screen-2xl flex-col">
-	<header class="flex h-20 items-center justify-between">
-		<div class="text-2xl font-bold">
-			<a href="/">
-				Beat<span class="text-primary">Hub</span>
-			</a>
-		</div>
+<slot />
 
-		<nav class="flex items-center">
-			<div class="space-x-4 lg:mr-12">
-				{#each links as { id, label, href } (id)}
-					<a
-						{href}
-						class={cn('px-2 text-sm', {
-							'border border-b-2 border-primary py-1.5 font-semibold': $page.url.pathname === href,
-							'font-thin text-muted-foreground hover:text-primary': $page.url.pathname !== href
-						})}
-					>
-						{label}
-					</a>
-				{/each}
-			</div>
-
-			<!-- TODO: Show this button only to authenticated users -->
-			<Button href="/events/add" size="sm">
-				<PlusIcon class="mr-2 size-4" />
-				New Event
-			</Button>
-		</nav>
-	</header>
-
-	<!-- Main app entry point 👇 -->
-	<slot />
-
-	<footer
-		class="mt-6 flex flex-col items-center gap-2 border-t border-gray-600 py-8 text-xs text-gray-400"
-	>
-		<div class="flex items-center space-x-3">
-			{#each links as { id, label, href } (id)}
-				<a
-					{href}
-					class={cn('px-1 text-sm', {
-						'border-b-2 border-primary py-1.5 font-semibold':
-							$page.url.pathname === href || $page.url.pathname.startsWith(href),
-						'font-thin text-muted-foreground hover:text-primary':
-							$page.url.pathname !== href && !$page.url.pathname.startsWith(href)
-					})}
-				>
-					{label}
-				</a>
-			{/each}
-		</div>
-
-		<p>Copyright &copy; DJ Block {new Date().getFullYear()}</p>
-		<p>Powered by SvelteKit, Turso and Tailwind CSS</p>
-	</footer>
-
-	<ModeWatcher defaultMode="light" />
-	<Toaster />
-</div>
+<ModeWatcher defaultMode="light" />
+<Toaster />
