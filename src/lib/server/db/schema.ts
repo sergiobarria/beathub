@@ -1,8 +1,11 @@
+import { createId } from '@paralleldrive/cuid2';
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const events = sqliteTable('events', {
-	id: text('id').primaryKey(), // Using CUIDs as primary keys
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => createId()), // Using CUIDs as primary keys
 
 	// columns
 	name: text('name').notNull().unique(),
@@ -28,7 +31,29 @@ export const events = sqliteTable('events', {
 });
 
 export const states = sqliteTable('states', {
-	id: text('id').primaryKey(),
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => createId()),
 	name: text('name').notNull(),
 	abbreviation: text('abbreviation').notNull()
+});
+
+// ======== Auth Related Tables ========
+export const users = sqliteTable('users', {
+	id: text('id')
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => createId()),
+	email: text('email').unique(),
+	password: text('password'),
+	github_id: integer('github_id').unique(),
+	username: text('username').notNull()
+});
+
+export const sessions = sqliteTable('sessions', {
+	id: text('id').notNull().primaryKey(), // Can't use the $defaultFn here because it causes issues with Lucia's adapter
+	userId: text('user_id')
+		.notNull()
+		.references(() => users.id),
+	expiresAt: integer('expires_at').notNull()
 });

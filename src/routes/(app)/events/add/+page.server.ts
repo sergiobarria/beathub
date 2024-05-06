@@ -3,14 +3,15 @@ import type { PageServerLoad } from './$types';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { redirect } from 'sveltekit-flash-message/server';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createId } from '@paralleldrive/cuid2';
 import slugify from 'slugify';
 
 import { db } from '$lib/server/db';
 import { InsertEventSchema } from '$lib/schemas';
 import { events } from '$lib/server/db/schema';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+	if (!event.locals.user) redirect(303, '/login');
+
 	const states = await db.query.states.findMany({
 		columns: { abbreviation: false }
 	});
@@ -33,7 +34,6 @@ export const actions: Actions = {
 				.insert(events)
 				.values({
 					...form.data,
-					id: createId(),
 					slug: slugify(form.data.name, { lower: true })
 				})
 				.returning({ insertedSlug: events.slug });

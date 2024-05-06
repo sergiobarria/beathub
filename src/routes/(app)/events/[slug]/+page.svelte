@@ -46,33 +46,36 @@
 				<p class="animate-bounce font-semibold text-green-400">{$flash.message}</p>
 			{/if}
 		</div>
-		<div class="flex items-center gap-6">
-			<Button href={`/events/${data.event.slug}/edit`} variant="outline" class="min-w-28">
-				<PencilIcon class="mr-2 size-4" />
-				Edit
-			</Button>
 
-			<form method="POST" action="?/delete" use:enhance>
-				<input type="hidden" name="id" value={data.event.id} />
-
-				<Button
-					type="submit"
-					variant="destructive"
-					class="min-w-28"
-					aria-disabled={$delayed || $submitting}
-					disabled={$delayed || $submitting}
-					name="delete"
-					on:click={(e) => !confirm('Are you sure?') && e.preventDefault()}
-				>
-					{#if $delayed || $submitting}
-						<Loader2Icon class="size-4 animate-spin" />
-					{:else}
-						<TrashIcon class="mr-2 size-4" />
-						Delete
-					{/if}
+		{#if data.user}
+			<div class="flex items-center gap-6">
+				<Button href={`/events/${data.event.slug}/edit`} variant="outline" class="min-w-28">
+					<PencilIcon class="mr-2 size-4" />
+					Edit
 				</Button>
-			</form>
-		</div>
+
+				<form method="POST" action="?/delete" use:enhance>
+					<input type="hidden" name="id" value={data.event.id} />
+
+					<Button
+						type="submit"
+						variant="destructive"
+						class="min-w-28"
+						aria-disabled={$delayed || $submitting}
+						disabled={$delayed || $submitting}
+						name="delete"
+						on:click={(e) => !confirm('Are you sure?') && e.preventDefault()}
+					>
+						{#if $delayed || $submitting}
+							<Loader2Icon class="size-4 animate-spin" />
+						{:else}
+							<TrashIcon class="mr-2 size-4" />
+							Delete
+						{/if}
+					</Button>
+				</form>
+			</div>
+		{/if}
 	</div>
 
 	<div class="flex items-center gap-2">

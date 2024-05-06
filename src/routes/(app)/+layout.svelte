@@ -1,9 +1,13 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
-	import { LogInIcon, PlusIcon } from 'lucide-svelte';
+	import { LogInIcon, LogOutIcon, PlusIcon } from 'lucide-svelte';
+	import type { PageData } from './$types';
 
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
+	import { enhance } from '$app/forms';
+
+	export let data: PageData;
 
 	const links = [
 		{ id: 0, label: 'Events', href: '/events' },
@@ -44,16 +48,26 @@
 			</div>
 
 			<div class="flex gap-6">
-				<!-- TODO: Show this button only to authenticated users -->
-				<Button href="/events/add" size="sm">
-					<PlusIcon class="mr-2 size-4" />
-					New Event
-				</Button>
+				{#if data.user}
+					<Button href="/events/add" size="sm">
+						<PlusIcon class="mr-2 size-4" />
+						New Event
+					</Button>
+				{/if}
 
-				<Button href="/login" size="sm">
-					<LogInIcon class="mr-2 size-4" />
-					Sign In
-				</Button>
+				{#if data.user}
+					<form method="POST" action="?/singOut" use:enhance>
+						<Button type="submit" size="sm">
+							<LogOutIcon class="mr-2 size-4" />
+							Sign Out
+						</Button>
+					</form>
+				{:else}
+					<Button href="/signin" size="sm">
+						<LogInIcon class="mr-2 size-4" />
+						Sign In
+					</Button>
+				{/if}
 			</div>
 		</nav>
 	</header>
