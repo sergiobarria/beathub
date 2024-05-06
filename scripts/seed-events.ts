@@ -1,4 +1,3 @@
-import { createId } from '@paralleldrive/cuid2';
 import slugify from 'slugify';
 
 import { getTursoClient } from './get-client';
@@ -21,7 +20,6 @@ async function main() {
 			.insert(events)
 			.values(
 				eventsData.map((event) => ({
-					id: createId(),
 					name: event.name,
 					slug: slugify(event.name, { lower: true }),
 					venue: event.venue,

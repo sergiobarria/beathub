@@ -1,5 +1,3 @@
-import { createId } from '@paralleldrive/cuid2';
-
 import { getTursoClient } from './get-client';
 import { states } from '../src/lib/server/db/schema';
 import statesData from '../data/states.json';
@@ -13,7 +11,6 @@ async function main() {
 			.insert(states)
 			.values(
 				statesData.map((state) => ({
-					id: createId(),
 					name: state.name,
 					abbreviation: state.abbreviation
 				}))
